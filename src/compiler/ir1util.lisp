@@ -1971,7 +1971,9 @@
 (defun note-unreferenced-vars (vars policy)
   (dolist (var vars)
     (unless (or (leaf-ever-used var)
-                (lambda-var-ignorep var))
+                (lambda-var-ignorep var)
+                ;; Do not complain, if the var has a wildcard name "_".
+                (equal (symbol-name (leaf-debug-name var)) "_"))
       (unless (policy policy (= inhibit-warnings 3))
         ;; ANSI section "3.2.5 Exceptional Situations in the Compiler"
         ;; requires this to be no more than a STYLE-WARNING.
